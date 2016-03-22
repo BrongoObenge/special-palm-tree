@@ -5,4 +5,6 @@ package nl.specialtree.core
   */
 object Main extends App{
     println("Hello Trees")
+    val x = "hello tree"
+    println(x)
 }
