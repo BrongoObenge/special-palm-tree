@@ -7,5 +7,5 @@ package nl.specialtree.core
 
 class UserPref(id:String) {
   val userId = id
-  var ratings:List[(Int, Double)] = ()
+  var ratings:List[(Int, Double)] = List()
 }
