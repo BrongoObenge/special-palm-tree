@@ -60,13 +60,14 @@ class Hoer {
 
     val itemReference:ItemReference = deviationMatrix.get(item1._1).get
     for(item <- itemReference.results.iterator){
-      if(item._1 == item2._1){
         val newDeviation:Double = ((item._2*item._3)+(item1._2 - item2._2))/(item._3+1) //(CurrentDeviation * Cardinality)+(item1Rating - item2Rating)/Cardinality+1
-//        itemReference.results.
+        print("===Deviation Updated===\nOld deviation: "+ item._2+"\nNew deviation: "+ newDeviation+"\n===")
+        deviationMatrix.get(item1._1).get.results = deviationMatrix.get(item1._1).get.results.filter(x => x == item)
+        deviationMatrix.get(item1._1).get.results = deviationMatrix.get(item1._1).get.results.::(item._1, newDeviation, item._3+1)
 
-
-      }
     }
-    null
+    if(Config.debug) this.printDeviationMatrix(deviationMatrix)
+    deviationMatrix
   }
+
 }
