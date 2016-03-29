@@ -6,5 +6,5 @@ object Main extends App{
   val dataService = new LoadDataService()
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
   val a = new Hoer()
-  println(a calculateAllDeviations(userMap))
+  a.calculateAllDeviations(userMap)
 }
