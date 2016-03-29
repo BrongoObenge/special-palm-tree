@@ -1,10 +1,10 @@
 # special-palm-tree
 palm trees are the best thing that has happened to humankind
 # Req
-- [ ] Tuples
+- [x] Tuples
 - [ ] Discriminated Union
-- [ ] Records / Class(scala)
-- [ ] Functions
+- [x] Records / Class(scala)
+- [x] Functions
 - [ ] Recursive Functions
 
 #Simple

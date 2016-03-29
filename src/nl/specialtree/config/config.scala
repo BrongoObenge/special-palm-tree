@@ -6,4 +6,5 @@ package nl.specialtree.config
 object Config {
   val prefix = "/home/jiar/Git"
   val dataLocation = prefix+"/special-palm-tree/res/data/userItem.data"
+  val debug = false
 }
