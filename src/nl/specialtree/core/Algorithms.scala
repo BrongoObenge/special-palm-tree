@@ -20,6 +20,6 @@ class Algorithms {
         cardinality+=1
       }
     }
-    currDeviation/cardinality
+    (currDeviation/cardinality, cardinality)
   }
 }
