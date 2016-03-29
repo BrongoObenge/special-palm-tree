@@ -5,7 +5,4 @@ package nl.specialtree.core
 object Main extends App{
   val dataService = new LoadDataService()
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
-  val a = new Algorithms()
-  println(a.slopeOne(userMap, 101, 102))
-
 }
