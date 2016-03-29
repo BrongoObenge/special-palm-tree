@@ -8,20 +8,20 @@ import scala.io.Source
   */
 object Main extends App{
   val debug = false
-  var items:Map[String,UserPref] = Map()
+  var userMap:Map[String,UserPref] = Map()
   val source = Source.fromFile(Config.dataLocation)
   try {
 
     for(line <- source.getLines()) {
       val ln = line.split(',')
       if(debug) println(s"user ${ln(0)} item ${ln(1)} itemRating ${ln(2)}")
-      if(items.contains(ln(0))){
-        var x = items.get(ln(0)).get
-        x.ratings = x.ratings.::(ln(1).toInt:Int, ln(2).toDouble:Double)
+      if(userMap.contains(ln(0))){
+        val tempUserPreference = userMap.get(ln(0)).get
+        tempUserPreference.ratings = tempUserPreference.ratings.::(ln(1).toInt:Int, ln(2).toDouble:Double)
       }else{
-        var a = new UserPref(ln(0))
-        a.ratings = a.ratings.::(ln(1).toInt:Int, ln(2).toDouble:Double)
-        items+=(ln(0) -> a)
+        val tempUserPreference = new UserPref(ln(0))
+        tempUserPreference.ratings = tempUserPreference.ratings.::(ln(1).toInt:Int, ln(2).toDouble:Double)
+        userMap+=(ln(0) -> tempUserPreference)
       }
     }
   } finally {
@@ -29,7 +29,7 @@ object Main extends App{
 
     if(debug) {
       println("=========")
-      for(a <- items)
+      for(a <- userMap)
         println(a._2.ratings)
     }
   }
