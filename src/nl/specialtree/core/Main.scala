@@ -11,7 +11,7 @@ class Printer {
 }
 
 object Main extends App{
-  val a = new Printer
-  a askInput()
-
+    println("Hello Trees")
+    val x = "hello tree"
+    println(x)
 }
