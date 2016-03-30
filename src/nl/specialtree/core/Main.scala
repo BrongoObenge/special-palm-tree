@@ -9,7 +9,8 @@ object Main extends App{
 
 //  println(h.getAllKeys(userMap))
 //  println("=====")
-//  println(print(h.getAllKeys(userMap, recursion = true)))
-
-  println(userMap.get("1").get.hasRated(101))
+//  println(h.getAllKeys(userMap, recursion = true))
+//
+//  println(userMap.get("1").get.hasRated(101))
+  println("======")
 }

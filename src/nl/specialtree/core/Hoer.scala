@@ -5,11 +5,12 @@ import nl.specialtree.config.Config
 /**
   * Created by jiar on 29-3-16.
   */
+
 class Hoer {
   def calculateAllDeviations(dataset:Map[String, UserPref]):Map[Int, ItemReference] = {
     var returnVal: Map[Int, ItemReference] = Map()
     val alg = new Algorithms()
-    val keys: List[Int] = this.getAllKeys(dataset)
+    val keys: List[Int] = this.getAllKeys(dataset, recursion=true)
     var tempKey1 = -1
     var tempKey2 = -1
     for (key1 <- keys) {
@@ -19,10 +20,8 @@ class Hoer {
         if (tempKey1 != tempKey2) {
           val result = alg.slopeOne(dataset, tempKey1, tempKey2, recursion = true)
           if (returnVal.contains(tempKey1)) {
-            //Get Itemref add vals
             returnVal.get(tempKey1).get.results = returnVal.get(tempKey1).get.results.::(tempKey2, result._1, result._2)
           } else {
-            //create itemref
             val itemRef: ItemReference = new ItemReference(tempKey1)
             itemRef.results = itemRef.results.::(tempKey2, result._1, result._2)
             returnVal += (tempKey1 -> itemRef)
@@ -35,9 +34,9 @@ class Hoer {
   }
 
   def getAllKeys(dataset:Map[String, UserPref], recursion:Boolean=false):List[Int] = {
-    //Problems with recursion
     if(recursion) getAllKeysRecursive(dataset, List(), 0) else getAllKeysNormal(dataset)
   }
+
   private def getAllKeysNormal(dataset:Map[String, UserPref]):List[Int] = {
     var keys:List[Int] = List()
     for(data <- dataset) {
@@ -47,18 +46,16 @@ class Hoer {
     }
     keys
   }
-  private def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int]=List(), index:Int=0):List[Int] = { //TODO
+  private def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int]=List[Int](), index:Int=0):List[Int] = {
     val datasetArray = dataset.toArray
-
-    if(index > datasetArray.size-1) return list
-    println(matchKeys(datasetArray(index)._2, list))
-    getAllKeysRecursive(dataset, matchKeys(datasetArray(index)._2, List(), 0), index+1)
+    if(index > datasetArray.length-1) return list
+    val resultList:List[Int] = (matchKeys(datasetArray(index)._2) ++ list).distinct
+    getAllKeysRecursive(dataset, list=resultList, index+1)
   }
 
-  private def matchKeys(data:UserPref, list:List[Int]=List(), index:Int=0):List[Int] = { //TODO
+  private def matchKeys(data:UserPref, list:List[Int]=List[Int](), index:Int=0):List[Int] = {
     val ratingsArray = data.ratings.toArray
-    if(index > ratingsArray.size-1) return list
-    println(list)
+    if(index > ratingsArray.length-1) return list
     if(!list.contains(ratingsArray(index)._1)){
       return matchKeys(data, ratingsArray(index)._1 :: list, index+1)
     }
@@ -74,7 +71,7 @@ class Hoer {
     println("END=======DEVIATION MATRIX============")
   }
 
-  def updateDevationMatrix(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),
+  private def updateDevationMatrix(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),    //TODO put in recursion
         item2:(Int, Double)):Map[Int, ItemReference] = {
     assert(item1._1 == item2._1)
 

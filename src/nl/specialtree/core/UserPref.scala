@@ -27,6 +27,6 @@ class UserPref(id:String) {
     if(index>ratingsArr.size-1) return -1
     if(ratingsArr(index)._1 == item)
       return ratingsArr(index)._2
-    getRatingRecursion(item, index+1)
+    getRatingRecursive(item, index+1)
   }
 }
