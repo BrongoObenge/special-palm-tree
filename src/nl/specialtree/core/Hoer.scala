@@ -46,6 +46,7 @@ class Hoer {
     }
     keys
   }
+
   private def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int]=List[Int](), index:Int=0):List[Int] = {
     val datasetArray = dataset.toArray
     if(index > datasetArray.length-1) return list
@@ -61,6 +62,7 @@ class Hoer {
     }
     matchKeys(data, list, index+1)
   }
+
   def printDeviationMatrix(data:Map[Int, ItemReference]) = {
     println("=======DEVIATION MATRIX============")
     for(d <- data){
@@ -86,5 +88,4 @@ class Hoer {
     if(Config.debug) this.printDeviationMatrix(deviationMatrix)
     deviationMatrix
   }
-
 }
