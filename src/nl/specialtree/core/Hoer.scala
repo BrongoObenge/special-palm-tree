@@ -17,7 +17,7 @@ class Hoer {
       for (key2 <- keys) {
         tempKey2 = key2
         if (tempKey1 != tempKey2) {
-          val result = alg.slopeOne(dataset, tempKey1, tempKey2, recursion = false)
+          val result = alg.slopeOne(dataset, tempKey1, tempKey2, recursion = true)
           if (returnVal.contains(tempKey1)) {
             //Get Itemref add vals
             returnVal.get(tempKey1).get.results = returnVal.get(tempKey1).get.results.::(tempKey2, result._1, result._2)
@@ -34,16 +34,36 @@ class Hoer {
   returnVal
   }
 
-  def getAllKeys(dataset:Map[String, UserPref]):List[Int] = {
+  def getAllKeys(dataset:Map[String, UserPref], recursion:Boolean=false):List[Int] = {
+    //Problems with recursion
+    if(recursion) getAllKeysRecursive(dataset, List(), 0) else getAllKeysNormal(dataset)
+  }
+  def getAllKeysNormal(dataset:Map[String, UserPref]):List[Int] = {
     var keys:List[Int] = List()
     for(data <- dataset) {
       for(d <- data._2.ratings.iterator)
         if(!keys.contains(d._1))
           keys = keys.::(d._1)
-     }
+    }
     keys
   }
+  def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int], index:Int):List[Int] = {
+    val datasetArray = dataset.toArray
 
+    if(index > datasetArray.size-1) return list
+    println(matchKeys(datasetArray(index)._2, List(), 0))
+    getAllKeysRecursive(dataset, matchKeys(datasetArray(index)._2, List(), 0), index+1)
+  }
+
+  def matchKeys(data:UserPref, list:List[Int], index:Int):List[Int] = {
+    val ratingsArray = data.ratings.toArray
+    if(index > ratingsArray.size-1) return list
+    println(list)
+    if(!list.contains(ratingsArray(index)._1)){
+      return matchKeys(data, ratingsArray(index)._1 :: list, index+1)
+    }
+    matchKeys(data, list, index+1)
+  }
   def printDeviationMatrix(data:Map[Int, ItemReference]) = {
     println("=======DEVIATION MATRIX============")
     for(d <- data){

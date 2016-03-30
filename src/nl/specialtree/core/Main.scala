@@ -5,8 +5,9 @@ package nl.specialtree.core
 object Main extends App{
   val dataService = new LoadDataService()
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
+  val h:Hoer = new Hoer()
 
-  val alg:Algorithms = new Algorithms()
-  print(alg.slopeOne(userMap, 101,102, recursion = true))
-
+  println(h.getAllKeys(userMap))
+  println("=====")
+  println(print(h.getAllKeys(userMap, recursion = true)))
 }
