@@ -5,6 +5,7 @@ package nl.specialtree.core
 object Main extends App{
   val dataService = new LoadDataService()
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
-  val a = new Hoer()
-  a.updateDevationMatrix(a.calculateAllDeviations(userMap), (101, 5), (101, 4))
+
+  val alg:Algorithms = new Algorithms()
+  alg.getCurrentDeviation(userMap, 0, userMap.size, 0)
 }

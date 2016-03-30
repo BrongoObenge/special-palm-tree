@@ -22,4 +22,12 @@ class Algorithms {
     }
     (currDeviation/cardinality, cardinality)
   }
+
+  def getCurrentDeviation(dataset:Map[String, UserPref], i:Int, y:Int, value:Double): Double ={
+    if (i > y) return value
+
+    
+    return 0
+
+  }
 }
