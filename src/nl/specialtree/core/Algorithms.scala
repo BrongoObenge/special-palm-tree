@@ -23,18 +23,18 @@ class Algorithms {
     }
     (currDeviation/cardinality, cardinality)
   }
-  def slopeOneRecursive(dataset:Map[String, UserPref], item1:Int, item2:Int): (Double, Int) ={
-    val a = getCurrentDeviation(dataset, item1, item2, 0, dataset.size-1, 0, 0)
-    (a._1/a._2, a._2)
+  private def slopeOneRecursive(dataset:Map[String, UserPref], item1:Int, item2:Int): (Double, Int) ={
+    val result = getCurrentDeviation(dataset, item1, item2)
+    (result._1/result._2, result._2)
   }
-  def getCurrentDeviation(dataset:Map[String, UserPref], item1:Int, item2:Int, i:Int, max:Int, cardinality:Int, value:Double):(Double, Int) = {
-    if(max < i) return (value, cardinality)
+  private def getCurrentDeviation(dataset:Map[String, UserPref], item1:Int, item2:Int, cardinality:Int=0, value:Double=0, index:Int=0):(Double, Int) = {
+    if(dataset.size-1 < index) return (value, cardinality)
 
     val datasetArray = dataset.toArray
-    println(i)
-    val a = datasetArray(i)
+    println(index)
+    val a = datasetArray(index)
     if (!a._2.hasRated(item1) && a._2.hasRated(item2)) {
-      getCurrentDeviation(dataset, item1, item2, i + 1, max, cardinality, value)
+      getCurrentDeviation(dataset, item1, item2, cardinality=cardinality, value=value, index + 1)
     }else {
       val item1Rating: Double = a._2.getRating(item1)
       val item2Rating: Double = a._2.getRating(item2)
@@ -43,7 +43,7 @@ class Algorithms {
         println(item1Rating)
         println(item2Rating)
       }
-      getCurrentDeviation(dataset, item1, item2, i + 1, max, cardinality+1, value + (item1Rating - item2Rating))
+      getCurrentDeviation(dataset, item1, item2, cardinality=cardinality+1, value=value + (item1Rating - item2Rating), index + 1)
     }
   }
 }

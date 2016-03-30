@@ -9,24 +9,24 @@ class UserPref(id:String) {
   val userId = id
   var ratings:List[(Int, Double)] = List()
 
-  def getRating(item:Int):Double = {
+  def getRating(item:Int, recursion:Boolean=true):Double = {
+    if (recursion) return getRatingRecursive(item)
     for(r <- ratings){
       if(r._1 == item)
         return r._2
     }
     -1
   }
+
   def hasRated(item:Int):Boolean ={
-    for(r <- ratings){
-      if(r._1 == item)
-        return true
-    }
-    false
+    if(getRating(item, recursion=true) != -1) true else false
   }
 
-  def hasRatedRecursion(item:Int, index:Int):Boolean = {
-    val ratingsArray = ratings.toArray
-    if(index>ratingsArray.size-1) return false
-    //if(ratingsArra
+  private def getRatingRecursive(item:Int, index:Int=0):Double = {
+    val ratingsArr = ratings.toArray
+    if(index>ratingsArr.size-1) return -1
+    if(ratingsArr(index)._1 == item)
+      return ratingsArr(index)._2
+    getRatingRecursion(item, index+1)
   }
 }

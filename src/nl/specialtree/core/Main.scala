@@ -7,7 +7,9 @@ object Main extends App{
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
   val h:Hoer = new Hoer()
 
-  println(h.getAllKeys(userMap))
-  println("=====")
-  println(print(h.getAllKeys(userMap, recursion = true)))
+//  println(h.getAllKeys(userMap))
+//  println("=====")
+//  println(print(h.getAllKeys(userMap, recursion = true)))
+
+  println(userMap.get("1").get.hasRated(101))
 }

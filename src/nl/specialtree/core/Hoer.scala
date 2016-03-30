@@ -38,7 +38,7 @@ class Hoer {
     //Problems with recursion
     if(recursion) getAllKeysRecursive(dataset, List(), 0) else getAllKeysNormal(dataset)
   }
-  def getAllKeysNormal(dataset:Map[String, UserPref]):List[Int] = {
+  private def getAllKeysNormal(dataset:Map[String, UserPref]):List[Int] = {
     var keys:List[Int] = List()
     for(data <- dataset) {
       for(d <- data._2.ratings.iterator)
@@ -47,15 +47,15 @@ class Hoer {
     }
     keys
   }
-  def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int], index:Int):List[Int] = {
+  private def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int]=List(), index:Int=0):List[Int] = { //TODO
     val datasetArray = dataset.toArray
 
     if(index > datasetArray.size-1) return list
-    println(matchKeys(datasetArray(index)._2, List(), 0))
+    println(matchKeys(datasetArray(index)._2, list))
     getAllKeysRecursive(dataset, matchKeys(datasetArray(index)._2, List(), 0), index+1)
   }
 
-  def matchKeys(data:UserPref, list:List[Int], index:Int):List[Int] = {
+  private def matchKeys(data:UserPref, list:List[Int]=List(), index:Int=0):List[Int] = { //TODO
     val ratingsArray = data.ratings.toArray
     if(index > ratingsArray.size-1) return list
     println(list)
