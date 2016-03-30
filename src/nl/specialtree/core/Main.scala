@@ -7,5 +7,6 @@ object Main extends App{
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
 
   val alg:Algorithms = new Algorithms()
-  alg.getCurrentDeviation(userMap, 0, userMap.size, 0)
+  print(alg.slopeOne(userMap, 101,102, recursion = true))
+
 }

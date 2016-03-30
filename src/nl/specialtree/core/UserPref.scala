@@ -14,7 +14,7 @@ class UserPref(id:String) {
       if(r._1 == item)
         return r._2
     }
-    return -1
+    -1
   }
   def hasRated(item:Int): Boolean ={
     for(r <- ratings){

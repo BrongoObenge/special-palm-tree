@@ -17,7 +17,7 @@ class Hoer {
       for (key2 <- keys) {
         tempKey2 = key2
         if (tempKey1 != tempKey2) {
-          val result = alg.slopeOne(dataset, tempKey1, tempKey2)
+          val result = alg.slopeOne(dataset, tempKey1, tempKey2, recursion = false)
           if (returnVal.contains(tempKey1)) {
             //Get Itemref add vals
             returnVal.get(tempKey1).get.results = returnVal.get(tempKey1).get.results.::(tempKey2, result._1, result._2)
