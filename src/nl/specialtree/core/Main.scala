@@ -7,10 +7,15 @@ object Main extends App{
   val userMap:Map[String, UserPref] = dataService loadSmallDataset()
   val h:Hoer = new Hoer()
 
-//  println(h.getAllKeys(userMap))
+  h.printDeviationMatrix(h.updateDevationMatrix(h.calculateAllDeviations(userMap), (101,1),(101,5), recursive = true))
+  println("--------------------------------")
+  h.printDeviationMatrix(h.updateDevationMatrix(h.calculateAllDeviations(userMap), (101,1),(101,5), recursive = false))
+
+  //  println(h.getAllKeys(userMap))
+//  println("abed.createApplication('F# Datascience opdracht')")
 //  println("=====")
 //  println(h.getAllKeys(userMap, recursion = true))
 //
 //  println(userMap.get("1").get.hasRated(101))
-  println("======")
+//  println("======")
 }

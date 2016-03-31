@@ -65,27 +65,42 @@ class Hoer {
 
   def printDeviationMatrix(data:Map[Int, ItemReference]) = {
     println("=======DEVIATION MATRIX============")
-    for(d <- data){
-      println("===")
-      println(d._1)
-      d._2.results.foreach {println}
-    }
+    data.foreach{d => {println("==="); println(d._1); d._2.results.foreach{println}}}
     println("END=======DEVIATION MATRIX============")
   }
 
-  private def updateDevationMatrix(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),    //TODO put in recursion
-        item2:(Int, Double)):Map[Int, ItemReference] = {
+  def updateDevationMatrix(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),    //TODO put in recursion
+        item2:(Int, Double), recursive:Boolean=false):Map[Int, ItemReference] = {
     assert(item1._1 == item2._1)
-
+    if(recursive) return updateDevationMatrixRecursive(deviationMatrix, item1, item2)
     val itemReference:ItemReference = deviationMatrix.get(item1._1).get
     for(item <- itemReference.results.iterator){
-        val newDeviation:Double = ((item._2*item._3)+(item1._2 - item2._2))/(item._3+1) //(CurrentDeviation * Cardinality)+(item1Rating - item2Rating)/Cardinality+1
-        print("===Deviation Updated===\nOld deviation: "+ item._2+"\nNew deviation: "+ newDeviation+"\n===")
-        deviationMatrix.get(item1._1).get.results = deviationMatrix.get(item1._1).get.results.filter(x => x == item)
-        deviationMatrix.get(item1._1).get.results = deviationMatrix.get(item1._1).get.results.::(item._1, newDeviation, item._3+1)
-
+      val newDeviation:Double = ((item._2*item._3)+(item1._2 - item2._2))/(item._3+1) //(CurrentDeviation * Cardinality)+(item1Rating - item2Rating)/Cardinality+1
+      if(Config.debug) print("===Deviation Updated===\nOld deviation: "+ item._2+"\nNew deviation: "+ newDeviation+"\n===")
+      deviationMatrix.get(item1._1).get.results = deviationMatrix.get(item1._1).get.results.filter(x => x == item)
+      deviationMatrix.get(item1._1).get.results = deviationMatrix.get(item1._1).get.results.::(item._1, newDeviation, item._3+1)
     }
     if(Config.debug) this.printDeviationMatrix(deviationMatrix)
     deviationMatrix
   }
+  private def updateDevationMatrixRecursive(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double), item2:(Int, Double),
+        index:Int=0, result:Map[Int, ItemReference]= Map[Int, ItemReference]()):Map[Int, ItemReference] = {
+    assert(item1._1 == item2._1)
+    val itemReferenceArr:Array[(Int, Double, Int)] = deviationMatrix.get(item1._1).get.results.toArray
+    if(index > itemReferenceArr.length-1) return result
+
+    val a = itemReferenceArr(index)
+    val newDeviation:Double = ((a._2*a._3)+(item1._2 - item2._2))/(a._3+1) //(CurrentDeviation * Cardinality)+(item1Rating - item2Rating)/Cardinality+1
+    if(Config.debug) print("===Deviation Updated===\nOld deviation: "+ a._2+"\nNew deviation: "+ newDeviation+"\n===")
+    val tempResult: Map[Int, ItemReference] = replaceItemInMap(deviationMatrix, new ItemReference(index, deviationMatrix.get(item1._1).get.results.filter(x => x == a).::(a._1, newDeviation, a._3+1)), index)
+    updateDevationMatrixRecursive(deviationMatrix, item1, item2, index+1, tempResult)
+  }
+
+  private def replaceItemInMap(deviationMatrix:Map[Int, ItemReference], replacementObj:ItemReference, replaceIndex:Int, index:Int=0, result:Map[Int, ItemReference]=Map[Int, ItemReference]()):Map[Int, ItemReference] = {
+    if(index>deviationMatrix.size-1) return result
+    val arr = deviationMatrix.toArray
+    if(index == replaceIndex) replaceItemInMap(deviationMatrix, replacementObj, replaceIndex, index+1, result ++ Map(arr(replaceIndex)._1 -> replacementObj))
+    else replaceItemInMap(deviationMatrix, replacementObj, replaceIndex, index+1, result ++ Map(arr(index)._1 -> arr(index)._2))
+  }
+
 }

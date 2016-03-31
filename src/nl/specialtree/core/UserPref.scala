@@ -19,7 +19,7 @@ class UserPref(id:String) {
   }
 
   def hasRated(item:Int):Boolean ={
-    if(getRating(item, recursion=true) != -1) true else false
+    if(getRating(item) != -1) true else false
   }
 
   private def getRatingRecursive(item:Int, index:Int=0):Double = {

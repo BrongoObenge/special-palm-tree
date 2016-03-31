@@ -5,7 +5,7 @@ palm trees are the best thing that has happened to humankind
 - [ ] Discriminated Union
 - [x] Records / Class(scala)
 - [x] Functions
-- [ ] Recursive Functions
+- [x] Recursive Functions
 
 #Simple
 *Tuples*
