@@ -2,6 +2,8 @@ package nl.specialtree.core
 
 import nl.specialtree.config.Config
 
+import scala.collection.immutable.ListMap
+
 /**
   * Created by jiar on 29-3-16.
   */
@@ -166,4 +168,33 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
   //END =====ATTEMPT1 DOESN'T WORK
 
+  //=====ATTEMPT 1 Recommender Function
+
+  def recommendations(user:String, userDataSet:Map[String,UserPref], deviationMatrix:Map[Int,ItemReference]): ListMap[Int,Double] = {
+    //using the slope one algorithm
+    // recommendations (map (int:int))
+    var recommendations:Map[Int,Double] = Map()
+    // frequencies (list)
+    val alg:Algorithms = new Algorithms()
+    //convert the userid from string to int for other function
+    val userIdInt:Int = user.toInt
+    val userItems:Array[(Int, Double)] = userDataSet.get(user).get.ratings.toArray
+    for(item <- userItems) {
+        println(item._1)
+        for(otherItem <- deviationMatrix) {
+          if(!userItems.contains(otherItem._1)) {
+            if(!deviationMatrix.get(otherItem._1).get.results.contains(item._1))
+              {
+                val itemID = otherItem._1
+                val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userIdInt,itemID))
+                recommendations += (itemID -> predictedRating)
+              }
+          }
+        }
+    }
+    val sortedRecommendations = ListMap(recommendations.toSeq.sortWith(_._1 > _._1):_*)
+    sortedRecommendations
+
+  }
+  //END =====ATTEMPT 1 Recommender Function
 }

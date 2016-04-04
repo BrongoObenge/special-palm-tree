@@ -21,4 +21,11 @@ object Main extends App{
 //
 //  println(userMap.get("1").get.hasRated(101))
 //  println("======")
+
+//  Recommendation SHIZA
+    println("-------------------------------------------------------")
+    println("Recommendation session")
+    val recommendations = h.recommendations("7",userMap,h.calculateAllDeviations(userMap))
+    recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
+    println("-------------------------------------------------------")
 }
