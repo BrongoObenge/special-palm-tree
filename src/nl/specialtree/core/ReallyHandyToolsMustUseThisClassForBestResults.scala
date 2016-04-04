@@ -6,7 +6,7 @@ import nl.specialtree.config.Config
   * Created by jiar on 29-3-16.
   */
 
-class Hoer {
+class ReallyHandyToolsMustUseThisClassForBestResults {
   def calculateAllDeviations(dataset:Map[String, UserPref]):Map[Int, ItemReference] = {
     var returnVal: Map[Int, ItemReference] = Map[Int, ItemReference]()
     val alg = new Algorithms()
@@ -31,6 +31,46 @@ class Hoer {
     }
     if(Config.debug) this.printDeviationMatrix(returnVal)
   returnVal
+  }
+
+  def topRecommendations() ={
+    val alg = new Algorithms()
+    //Get User + not rated Item
+  }
+
+
+  //return:=(UserId, ItemId) Not Rated
+  def getUserWithNonRatedItems(dataset:Map[String, UserPref]):List[(Int, Int)]= {
+    val keys:List[Int] = getAllKeys(dataset)
+    val a:List[(Int, Int)] = yetAnotherMatchingSystem(dataset, keys)
+
+    println(a)
+    null
+  }
+
+  def yetAnotherMatchingSystem(dataset:Map[String, UserPref], keys:List[Int], index:Int=0, result:List[(Int,Int)]=List[(Int,Int)]()):List[(Int,Int)] = {
+    if(index > dataset.size-1) return result
+    val datasetArr = dataset.toArray
+    //func() -> get Unrated Items for user
+    val unratedItem:List[Int] = getUnratedItem(datasetArr(index)._2.ratings, keys, datasetArr(index)._1.toInt)
+
+    //TODO fix the mess
+    var newList:List[(Int, Int)] = List()
+    unratedItem.foreach(a => {newList.::(datasetArr(index)._1.toInt,a)})
+
+    yetAnotherMatchingSystem(dataset,keys,index+1,result ++ newList)
+  }
+
+  def getUnratedItem(dataset:List[(Int,Double)], keys:List[Int], index:Int=0, result:List[Int]=List()):List[Int] = {
+    if(index > dataset.size-1) return result
+    if(!compareIn(dataset(index)._1, keys)) getUnratedItem(dataset,keys, index+1,
+      result ++ List(dataset(index)._1))
+    getUnratedItem(dataset,keys,index+1, result)
+  }
+  def compareIn(compare:Int, inList:List[Int], index:Int=0):Boolean = {
+    if(index > inList.size-1) return false
+    if(compare == inList(index)) return true
+    compareIn(compare, inList, index+1)
   }
 
   def getAllKeys(dataset:Map[String, UserPref], recursion:Boolean=false):List[Int] = {

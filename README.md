@@ -11,7 +11,7 @@ palm trees are the best thing that has happened to humankind
 - [x] Slope One
 - [x] Devation Matrix
 - [x] Update Deviation Matrix
-- [ ] Predict Ratings
+- [x] Predict Ratings
 - [ ] Top recommendation
 
 
