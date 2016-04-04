@@ -26,11 +26,7 @@ class LoadDataService() {
       }
     } finally {
       source.close()
-      if (Config.debug) {
-        println("=========")
-        for (a <- userMap)
-          println(a._2.ratings)
-      }
+      if (Config.debug) {println("========="); userMap.foreach{a=>{println(a._2.ratings)}}}
     }
     userMap
   }

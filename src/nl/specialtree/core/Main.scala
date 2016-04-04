@@ -3,8 +3,22 @@ package nl.specialtree.core
   * Created by razmaklat on 22-3-16.
   */
 object Main extends App{
-  val dataService = new LoadDataService()
-  val userMap:Map[String, UserPref] = dataService loadSmallDataset()
-  val a = new Hoer()
-  a.updateDevationMatrix(a.calculateAllDeviations(userMap), (101, 5), (101, 4))
+  val userMap:Map[String, UserPref] = new LoadDataService() loadSmallDataset()
+  val h:Hoer = new Hoer()
+
+
+//  h.printDeviationMatrix(h.calculateAllDeviations(userMap))
+//  println("1--------------------------------")
+
+  println(new Algorithms().predictRating(userMap, h.calculateAllDeviations(userMap), (4, 101)))
+//  println("2--------------------------------")
+//  h.printDeviationMatrix(h.updateDevationMatrix(h.calculateAllDeviations(userMap), (101,1),(101,5), recursive = true))
+
+  //  println(h.getAllKeys(userMap))
+//  println("abed.createApplication('F# Datascience opdracht')")
+//  println("=====")
+//  println(h.getAllKeys(userMap, recursion = true))
+//
+//  println(userMap.get("1").get.hasRated(101))
+//  println("======")
 }
