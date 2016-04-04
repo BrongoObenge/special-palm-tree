@@ -37,8 +37,8 @@ class Algorithms {
       getCurrentDeviation(dataset, item1, item2, cardinality=cardinality+1, value=value + (item1Rating - item2Rating), index + 1)
     }
   }
-  //Req._1 = User
-  //Req._2 = Item
+
+  //Req._2 = (User, Item)
   //result = (numinator, denominator)
   def predictRating(userPreference:Map[String, UserPref], deviationMatrix:Map[Int, ItemReference], request:(Int, Int),
                             index:Int=0, result:(Double, Double)=(0,0)): Double = {
@@ -46,25 +46,23 @@ class Algorithms {
     val currentUserUserPref:Array[(Int, Double)] = userPreference.get(request._1.toString).get.ratings.toArray  //RATINGS
     if(index>currentUserUserPref.length-1) return result._1/result._2
 
-
-    val i = request._2
-    val j = currentUserUserPref(index)
-    val jId = currentUserUserPref(index)._1 // Get deviation from i to this
-
-    var devij:(Int, Double, Int) = (0,0,0)
-    for(x <- currentUserItemRef){ //TODO recursive function
-      if(x._1 == jId) devij = x
-    }
-
-    var jrating:Double = 0
-    for(y <- currentUserUserPref){ //TODO recursive function
-      if(y._1 == jId) jrating = y._2
-    }
+    val j = currentUserUserPref(index) // Get deviation from i to this
+    val deviation:(Int, Double, Int) = matchSomeShit(currentUserItemRef, j._1)
+    val jrating:Double = anotherBullshitMatcher(currentUserUserPref, j._1)
 
     predictRating(userPreference, deviationMatrix, request, index+1,
-      (result._1 +((jrating + devij._2) * devij._3), result._2+devij._3))
+      (result._1 +((jrating + deviation._2) * deviation._3), result._2+deviation._3))
+  }
 
-    //      predictRating(deviationMatrix, request, index+1, ,cardinality+1)
-
+  //TODO Discriminated Union?
+  private def matchSomeShit(arr:List[(Int, Double, Int)], matchValue:Int, index:Int=0):(Int, Double, Int) = {  //TODO give a function to compare to
+    if(index>arr.length-1) return (-1,-1,-1)
+    if(arr(index)._1 == matchValue) return arr(index)
+    matchSomeShit(arr, matchValue, index+1)
+  }
+  private def anotherBullshitMatcher(arr:Array[(Int, Double)], matchValue:Int, index:Int=0):Double = {  //TODO give a function to compare to
+    if(index>arr.length-1) return -1
+    if(arr(index)._1 == matchValue) return arr(index)._2
+    anotherBullshitMatcher(arr, matchValue, index+1)
   }
 }
