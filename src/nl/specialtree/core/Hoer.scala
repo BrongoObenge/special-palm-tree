@@ -83,6 +83,7 @@ class Hoer {
     if(Config.debug) this.printDeviationMatrix(deviationMatrix)
     deviationMatrix
   }
+  //=====ATTEMPT1
   private def updateDevationMatrixRecursive(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double), item2:(Int, Double),
         index:Int=0, result:Map[Int, ItemReference]= Map[Int, ItemReference]()):Map[Int, ItemReference] = {
     assert(item1._1 == item2._1)
@@ -101,6 +102,17 @@ class Hoer {
     val arr = deviationMatrix.toArray
     if(index == replaceIndex) replaceItemInMap(deviationMatrix, replacementObj, replaceIndex, index+1, result ++ Map(arr(replaceIndex)._1 -> replacementObj))
     else replaceItemInMap(deviationMatrix, replacementObj, replaceIndex, index+1, result ++ Map(arr(index)._1 -> arr(index)._2))
+  }
+  //END =====ATTEMPT1
+
+  //=====ATTEMPT2
+  private def a2(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double), item2:(Int, Double),
+                 index:Int=0, result:Map[Int, ItemReference]= Map[Int, ItemReference]()):Map[Int, ItemReference]= {
+    
+    assert(item1._1 == item2._1)
+
+    val item1ResultsArr:Array[(Int, Double, Int)] = deviationMatrix.get(item1._1).get.results.toArray
+    null
   }
 
 }
