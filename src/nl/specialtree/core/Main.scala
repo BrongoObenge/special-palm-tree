@@ -33,7 +33,7 @@ object Main extends App{
   //  Recommendation SHIZA <recursive>
     println("-------------------------------------------------------")
     println("Recommendation session")
-    val recommendations = h.recommendationsRecursive("7",userMap,h.calculateAllDeviations(userMap))
+    val recommendations = h.recommendationsRecursive("7",userMap,h.calculateAllDeviations(userMap), 1)
     recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
     println("-------------------------------------------------------")
   //  END recommendation SHIZA

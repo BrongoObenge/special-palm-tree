@@ -168,9 +168,10 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
   //END =====ATTEMPT1 DOESN'T WORK
 
-  def recommendations(user:String, userDataSet:Map[String,UserPref], deviationMatrix:Map[Int,ItemReference])
-  : ListMap[Int,Double] = {
+  def recommendations(user:String, userDataSet:Map[String,UserPref], deviationMatrix:Map[Int,ItemReference], limit:Int=0, recursion:Boolean=false)
+  : Map[Int,Double] = {
     //using the slope one algorithm
+    if(recursion)return recommendationsRecursive(user,userDataSet,deviationMatrix, limit)
     var recommendations:Map[Int,Double] = Map()
     val alg:Algorithms = new Algorithms()
     val userIdInt:Int = user.toInt
@@ -194,11 +195,11 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
 
   //=====ATTEMPT1 recommendations Recursive
-  def recommendationsRecursive(userID:String,userDataSet:Map[String,UserPref],deviationMatrix:Map[Int,ItemReference]
+  def recommendationsRecursive(userID:String,userDataSet:Map[String,UserPref],deviationMatrix:Map[Int,ItemReference], limit:Int=0
                               ):Map[Int,Double] = {
     val recommendations = traverseUserItems(userID,userDataSet,deviationMatrix)
-    val sortedRecommendations = ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*)
-    sortedRecommendations
+    if(limit == 0 )ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*)
+    else ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*).take(limit)
   }
 
   private def traverseUserItems(userID:String,userDataSet:Map[String,UserPref],deviationMatrix:Map[Int,ItemReference],
