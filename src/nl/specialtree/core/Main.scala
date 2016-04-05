@@ -6,7 +6,7 @@ object Main extends App{
   val userMap:Map[String, UserPref] = new LoadDataService() loadSmallDataset()
   val h:ReallyHandyToolsMustUseThisClassForBestResultsIfYouDontUseThisClassYouWillNotSeeTheNextDay = new ReallyHandyToolsMustUseThisClassForBestResultsIfYouDontUseThisClassYouWillNotSeeTheNextDay()
 
-  h.getUserWithNonRatedItems(userMap)
+
 //  h.printDeviationMatrix(h.calculateAllDeviations(userMap))
 //  println("1--------------------------------")
 
