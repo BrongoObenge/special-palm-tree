@@ -193,16 +193,20 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     sortedRecommendations
   }
 
-  def traverseDeviationMatrix(userID:Int,itemID:Int,otherItemID:Int,userDataSet:Map[String,UserPref],
+  def traverseDeviationMatrix(userID:Int,userDataSet:Map[String,UserPref],
                               deviationMatrix:Map[Int,ItemReference], index:Int = 0,
                               recommendation:Map[Int,Double]) : Map[Int,Double] = {
-    val alg = new Algorithms();
-    val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItemID).get.results.toArray
     if(index > deviationMatrix.size) return recommendation
-    if(devMatrixResults.exists{a => a._1 == itemID}) {
-      val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userID,itemID))
-      traverseDeviationMatrix(userID,itemID,)
+    val alg = new Algorithms()
+    val devMatrixArr = deviationMatrix.toArray
+    val otherItem = devMatrixArr(index)
+    val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItem._1).get.results.toArray
+
+    if(devMatrixResults.exists{a => a._1 == otherItem._1}) {
+      val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userID,otherItem._1))
+      traverseDeviationMatrix(userID, userDataSet, deviationMatrix, index+1, recommendation ++ Map(otherItem._1 -> predictedRating))
     }
+    traverseDeviationMatrix(userID, userDataSet, deviationMatrix, index+1, recommendation)
   }
 
   //=====ATTEMPT1 recommendations Recursive
