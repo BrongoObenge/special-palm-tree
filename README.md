@@ -42,3 +42,7 @@ For every userItem and userRating in the user's recommendations:
 
 Finally, for every diffItem that is in our results list, divide the total sum
 of that item by the total frequency of that item and return the results
+
+#UpdateDeviation
+Item A (old rating)
+Item B (new Rating)

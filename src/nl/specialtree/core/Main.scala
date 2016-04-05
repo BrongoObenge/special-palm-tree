@@ -23,18 +23,29 @@ object Main extends App{
 //  println("======")
 
 //  Recommendation SHIZA <non recursive>
-//    println("-------------------------------------------------------")
-//    println("Recommendation session")
-//    val recommendations = h.recommendations("6",userMap,h.calculateAllDeviations(userMap))
-//    recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
-//    println("-------------------------------------------------------")
+/*    println("-------------------------------------------------------")
+    println("Recommendation session")
+    val recommendations = h.recommendations("186",userMap,h.calculateAllDeviations(userMap))
+    recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
+    println("-------------------------------------------------------")*/
 //  END recommendation SHIZA
 
-  //  Recommendation SHIZA <non recursive>
+  //  Recommendation SHIZA <recursive>
     println("-------------------------------------------------------")
     println("Recommendation session")
-    val recommendations = h.recommendationsRecursive("6",userMap,h.calculateAllDeviations(userMap))
+    val recommendations = h.recommendationsRecursive("7",userMap,h.calculateAllDeviations(userMap))
     recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
     println("-------------------------------------------------------")
   //  END recommendation SHIZA
+
+
+  //PREDICTION
+/*  println("user 7")
+  println("Item 101 " + new Algorithms().predictRating(userMap, h.calculateAllDeviations(userMap), (7, 101)))
+  println("Item 103 " + new Algorithms().predictRating(userMap, h.calculateAllDeviations(userMap), (7, 103)))
+  println("Item 106 " + new Algorithms().predictRating(userMap, h.calculateAllDeviations(userMap), (7, 106)))
+  println("User 3")
+  println("Item 103 " + new Algorithms().predictRating(userMap, h.calculateAllDeviations(userMap), (3, 103)))
+  println("Item 105 " + new Algorithms().predictRating(userMap, h.calculateAllDeviations(userMap), (3, 105)))*/
+
 }
