@@ -197,7 +197,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   def recommendationsRecursive(userID:String,userDataSet:Map[String,UserPref],deviationMatrix:Map[Int,ItemReference]
                               ):Map[Int,Double] = {
     val recommendations = traverseUserItems(userID,userDataSet,deviationMatrix)
-    val sortedRecommendations = ListMap(recommendations.toSeq.sortWith(_._1 > _._1):_*)
+    val sortedRecommendations = ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*)
     sortedRecommendations
   }
 
