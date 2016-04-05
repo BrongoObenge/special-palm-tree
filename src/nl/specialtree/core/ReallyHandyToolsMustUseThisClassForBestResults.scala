@@ -168,15 +168,11 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
   //END =====ATTEMPT1 DOESN'T WORK
 
-  //=====ATTEMPT 1 Recommender Function
-
-  def recommendations(user:String, userDataSet:Map[String,UserPref], deviationMatrix:Map[Int,ItemReference]): ListMap[Int,Double] = {
+  def recommendations(user:String, userDataSet:Map[String,UserPref], deviationMatrix:Map[Int,ItemReference])
+  : ListMap[Int,Double] = {
     //using the slope one algorithm
-    // recommendations (map (int:int))
     var recommendations:Map[Int,Double] = Map()
-    // frequencies (list)
     val alg:Algorithms = new Algorithms()
-    //convert the userid from string to int for other function
     val userIdInt:Int = user.toInt
     val userItems:Array[(Int, Double)] = userDataSet.get(user).get.ratings.toArray
     for(item <- userItems) {
@@ -195,7 +191,21 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     }
     val sortedRecommendations = ListMap(recommendations.toSeq.sortWith(_._1 > _._1):_*)
     sortedRecommendations
-
   }
-  //END =====ATTEMPT 1 Recommender Function
+
+  def traverseDeviationMatrix(userID:Int,itemID:Int,otherItemID:Int,userDataSet:Map[String,UserPref],
+                              deviationMatrix:Map[Int,ItemReference], index:Int = 0,
+                              recommendation:Map[Int,Double]) : Map[Int,Double] = {
+    val alg = new Algorithms();
+    val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItemID).get.results.toArray
+    if(index > deviationMatrix.size) return recommendation
+    if(devMatrixResults.exists{a => a._1 == itemID}) {
+      val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userID,itemID))
+      traverseDeviationMatrix(userID,itemID,)
+    }
+  }
+
+  //=====ATTEMPT1 recommendations Recursive
+
+  //END =====ATTEMPT1
 }
