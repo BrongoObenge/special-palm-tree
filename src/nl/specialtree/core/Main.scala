@@ -22,10 +22,19 @@ object Main extends App{
 //  println(userMap.get("1").get.hasRated(101))
 //  println("======")
 
-//  Recommendation SHIZA
+//  Recommendation SHIZA <non recursive>
+//    println("-------------------------------------------------------")
+//    println("Recommendation session")
+//    val recommendations = h.recommendations("6",userMap,h.calculateAllDeviations(userMap))
+//    recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
+//    println("-------------------------------------------------------")
+//  END recommendation SHIZA
+
+  //  Recommendation SHIZA <non recursive>
     println("-------------------------------------------------------")
     println("Recommendation session")
-    val recommendations = h.recommendations("6",userMap,h.calculateAllDeviations(userMap))
+    val recommendations = h.recommendationsRecursive("6",userMap,h.calculateAllDeviations(userMap))
     recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
     println("-------------------------------------------------------")
+  //  END recommendation SHIZA
 }
