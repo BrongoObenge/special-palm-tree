@@ -182,7 +182,9 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     for(item <- userItems) {
         println(item._1)
         for(otherItem <- deviationMatrix) {
-          if(!userItems.contains(otherItem._1)) {
+          if(!userItems.exists{a => a._1 == otherItem._1} ) {
+
+            println("is not in the user item " + otherItem._1)
             if(!deviationMatrix.get(otherItem._1).get.results.contains(item._1))
               {
                 val itemID = otherItem._1
