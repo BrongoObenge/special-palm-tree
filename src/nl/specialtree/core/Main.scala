@@ -25,7 +25,7 @@ object Main extends App{
 //  Recommendation SHIZA
     println("-------------------------------------------------------")
     println("Recommendation session")
-    val recommendations = h.recommendations("3",userMap,h.calculateAllDeviations(userMap))
+    val recommendations = h.recommendations("6",userMap,h.calculateAllDeviations(userMap))
     recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
     println("-------------------------------------------------------")
 }

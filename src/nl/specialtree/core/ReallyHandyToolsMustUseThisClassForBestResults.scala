@@ -183,9 +183,6 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
         println(item._1)
         for(otherItem <- deviationMatrix) {
           if(!userItems.exists{a => a._1 == otherItem._1} ) {
-
-            //deviationMatrix.get(otherItem._1).get.results.contains(item._1)
-            //deviationMatrix.get(otherItem._1).get.results.exists{a => a._1 == item._1}
             val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItem._1).get.results.toArray
             if(devMatrixResults.exists{a => a._1 == item._1})
               {
