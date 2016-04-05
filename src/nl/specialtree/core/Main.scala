@@ -4,7 +4,7 @@ package nl.specialtree.core
   */
 object Main extends App{
   val userMap:Map[String, UserPref] = new LoadDataService() loadSmallDataset()
-  val h:ReallyHandyToolsMustUseThisClassForBestResults = new ReallyHandyToolsMustUseThisClassForBestResults()
+  val h:ReallyHandyToolsMustUseThisClassForBestResultsIfYouDontUseThisClassYouWillNotSeeTheNextDay = new ReallyHandyToolsMustUseThisClassForBestResultsIfYouDontUseThisClassYouWillNotSeeTheNextDay()
 
   h.getUserWithNonRatedItems(userMap)
 //  h.printDeviationMatrix(h.calculateAllDeviations(userMap))

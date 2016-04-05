@@ -8,7 +8,7 @@ import scala.collection.immutable.ListMap
   * Created by jiar on 29-3-16.
   */
 
-class ReallyHandyToolsMustUseThisClassForBestResults {
+class ReallyHandyToolsMustUseThisClassForBestResultsIfYouDontUseThisClassYouWillNotSeeTheNextDay {
   def calculateAllDeviations(dataset:Map[String, UserPref]):Map[Int, ItemReference] = {
     var returnVal: Map[Int, ItemReference] = Map[Int, ItemReference]()
     val alg = new Algorithms()
@@ -114,7 +114,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   def updateDevationMatrix(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),    //TODO put in recursion
         item2:(Int, Double), recursive:Boolean=false):Map[Int, ItemReference] = {
     //assert(item1._1 != item2._1)
-    if(recursive) return a2(deviationMatrix, item1, item2)
+    if(recursive) return updateDeviationMatrixRecursive(deviationMatrix, item1, item2)
     val itemReference:ItemReference = deviationMatrix.get(item1._1).get
     var item:(Int, Double, Int) = (0,0,0)
     for(a <- itemReference.results.iterator){
@@ -132,7 +132,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
 
   //=====ATTEMPT2
-  private def a2(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double), item2:(Int, Double),
+  private def updateDeviationMatrixRecursive(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double), item2:(Int, Double),
     index:Int=0):Map[Int, ItemReference]= {
     //assert(item1._1 != item2._1)
     val item1ResultsArr:Array[(Int, Double, Int)] = deviationMatrix.get(item1._1).get.results.toArray
@@ -141,9 +141,9 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     val newDeviation:Double = ((item._2*item._3)+(item1._2 - item2._2))/(item._3+1)
     println("===Deviation Updated===\nOld deviation: "+ item._2+"\nNew deviation: "+ newDeviation+"\n===")
     val newList = deviationMatrix.get(item1._1).get.results.filter(x => x == item).::(item._1, newDeviation, item._3+1)
-    a2(rep(deviationMatrix, newList, item1._1), item1, item2, index+1)
+    updateDeviationMatrixRecursive(replaceInMap(deviationMatrix, newList, item1._1), item1, item2, index+1)
   }
-  private def rep(map:Map[Int, ItemReference], newVal:List[(Int, Double, Int)], index:Int):Map[Int, ItemReference]={
+  private def replaceInMap(map:Map[Int, ItemReference], newVal:List[(Int, Double, Int)], index:Int):Map[Int, ItemReference]={
     map.filter((k) => k._1 != index) ++ Map[Int, ItemReference](index -> new ItemReference(index, newVal))
   }
   //=====ATTEMPT1 DOESN'T WORK
