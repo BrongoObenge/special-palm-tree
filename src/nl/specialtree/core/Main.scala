@@ -3,10 +3,10 @@ package nl.specialtree.core
   * Created by razmaklat on 22-3-16.
   */
 object Main extends App{
-  val userMap:Map[String, UserPref] = new LoadDataService() loadSmallDataset()
+  val userMap:Map[Int, UserPref] = new LoadDataService() loadSmallDataset()
   val h:ReallyHandyToolsMustUseThisClassForBestResults = new ReallyHandyToolsMustUseThisClassForBestResults()
 
-  h.getUserWithNonRatedItems(userMap)
+
 //  h.printDeviationMatrix(h.calculateAllDeviations(userMap))
 //  println("1--------------------------------")
 
@@ -33,7 +33,7 @@ object Main extends App{
   //  Recommendation SHIZA <recursive>
     println("-------------------------------------------------------")
     println("Recommendation session")
-    val recommendations = h.recommendationsRecursive("7",userMap,h.calculateAllDeviations(userMap), 1)
+    val recommendations = h.recommendationsRecursive(7,userMap,h.calculateAllDeviations(userMap), 1)
     recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
     println("-------------------------------------------------------")
   //  END recommendation SHIZA

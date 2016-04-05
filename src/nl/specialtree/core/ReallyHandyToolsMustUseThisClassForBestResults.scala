@@ -9,7 +9,7 @@ import scala.collection.immutable.ListMap
   */
 
 class ReallyHandyToolsMustUseThisClassForBestResults {
-  def calculateAllDeviations(dataset:Map[String, UserPref]):Map[Int, ItemReference] = {
+  def calculateAllDeviations(dataset:Map[Int, UserPref]):Map[Int, ItemReference] = {
     var returnVal: Map[Int, ItemReference] = Map[Int, ItemReference]()
     val alg = new Algorithms()
     val keys: List[Int] = this.getAllKeys(dataset, recursion = false)
@@ -75,11 +75,11 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
 //    compareIn(compare, inList, index+1)
 //  }
 
-  def getAllKeys(dataset:Map[String, UserPref], recursion:Boolean=false):List[Int] = {
-    if(recursion) getAllKeysRecursive(dataset, List(), 0) else getAllKeysNormal(dataset)
+  def getAllKeys(dataset:Map[Int, UserPref], recursion:Boolean=false):List[Int] = {
+    if(recursion) getAllKeysRecursive(dataset) else getAllKeysNormal(dataset)
   }
 
-  private def getAllKeysNormal(dataset:Map[String, UserPref]):List[Int] = {
+  private def getAllKeysNormal(dataset:Map[Int, UserPref]):List[Int] = {
     var keys:List[Int] = List()
     for(data <- dataset) {
       for(d <- data._2.ratings.iterator)
@@ -89,7 +89,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     keys
   }
 
-  private def getAllKeysRecursive(dataset:Map[String, UserPref], list:List[Int]=List[Int](), index:Int=0):List[Int] = {
+  private def getAllKeysRecursive(dataset:Map[Int, UserPref], list:List[Int]=List[Int](), index:Int=0):List[Int] = {
     val datasetArray = dataset.toArray
     if(index > datasetArray.length-1) return list
     val resultList:List[Int] = (matchKeys(datasetArray(index)._2) ++ list).distinct
@@ -168,11 +168,12 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
   //END =====ATTEMPT1 DOESN'T WORK
 
-  def recommendations(user:String, userDataSet:Map[String,UserPref], deviationMatrix:Map[Int,ItemReference], limit:Int=0, recursion:Boolean=false)
+  def recommendations(user:Int, userDataSet:Map[Int,UserPref], deviationMatrix:Map[Int,ItemReference], limit:Int=0,
+                      recursion:Boolean=false)
   : Map[Int,Double] = {
     //using the slope one algorithm
     if(recursion)return recommendationsRecursive(user,userDataSet,deviationMatrix, limit)
-    var recommendations:Map[Int,Double] = Map()
+    var recommendations:Map[Int,Double] = Map[Int,Double]()
     val alg:Algorithms = new Algorithms()
     val userIdInt:Int = user.toInt
     val userItems:Array[(Int, Double)] = userDataSet.get(user).get.ratings.toArray
@@ -195,14 +196,14 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
 
   //=====ATTEMPT1 recommendations Recursive
-  def recommendationsRecursive(userID:String,userDataSet:Map[String,UserPref],deviationMatrix:Map[Int,ItemReference], limit:Int=0
-                              ):Map[Int,Double] = {
+  def recommendationsRecursive(userID:Int,userDataSet:Map[Int,UserPref],deviationMatrix:Map[Int,ItemReference],
+                               limit:Int=0):Map[Int,Double] = {
     val recommendations = traverseUserItems(userID,userDataSet,deviationMatrix)
     if(limit == 0 )ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*)
     else ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*).take(limit)
   }
 
-  private def traverseUserItems(userID:String,userDataSet:Map[String,UserPref],deviationMatrix:Map[Int,ItemReference],
+  private def traverseUserItems(userID:Int,userDataSet:Map[Int,UserPref],deviationMatrix:Map[Int,ItemReference],
                                 index:Int = 0,recommendation:Map[Int,Double] = Map[Int,Double]()) : Map[Int,Double] = {
     val userDataSetArr = userDataSet.get(userID).get.ratings.toArray
     if(index > userDataSetArr.length -1 ) return recommendation
@@ -211,15 +212,15 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
 
   }
 
-  private def traverseDeviationMatrix(userID:Int,itemID:Int,userDataSet:Map[String,UserPref],
+  private def traverseDeviationMatrix(userID:Int,itemID:Int,userDataSet:Map[Int,UserPref],
                                       deviationMatrix:Map[Int,ItemReference], index:Int = 0,
-                                      recommendation:Map[Int,Double]=Map()) : Map[Int,Double] = {
+                                      recommendation:Map[Int,Double]=Map[Int,Double]()) : Map[Int,Double] = {
     if(index > deviationMatrix.size -1 ) return recommendation
     val alg = new Algorithms()
     val devMatrixArr = deviationMatrix.toArray
     val otherItem = devMatrixArr(index)
     val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItem._1).get.results.toArray
-    val userItems:Array[(Int, Double)] = userDataSet.get(userID.toString).get.ratings.toArray
+    val userItems:Array[(Int, Double)] = userDataSet.get(userID).get.ratings.toArray
 
     if(devMatrixResults.exists{a => a._1 == itemID} && !userItems.exists{a => a._1 == otherItem._1}) {
       val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userID,otherItem._1))

@@ -6,7 +6,7 @@ import nl.specialtree.config.Config
   * Created by jiar on 29-3-16.
   */
 class Algorithms {
-  def slopeOne(dataset:Map[String, UserPref], item1:Int, item2:Int, recursion:Boolean=true): (Double, Int) = {
+  def slopeOne(dataset:Map[Int, UserPref], item1:Int, item2:Int, recursion:Boolean=true): (Double, Int) = {
     if(recursion) return slopeOneRecursive(dataset, item1, item2)
     var currDeviation:Double = 0
     var cardinality:Int = 0
@@ -19,11 +19,11 @@ class Algorithms {
     }
     (currDeviation/cardinality, cardinality)
   }
-  private def slopeOneRecursive(dataset:Map[String, UserPref], item1:Int, item2:Int): (Double, Int) ={
+  private def slopeOneRecursive(dataset:Map[Int, UserPref], item1:Int, item2:Int): (Double, Int) ={
     val result = getCurrentDeviation(dataset, item1, item2)
     (result._1/result._2, result._2)
   }
-  private def getCurrentDeviation(dataset:Map[String, UserPref], item1:Int, item2:Int, cardinality:Int=0, value:Double=0, index:Int=0):(Double, Int) = {
+  private def getCurrentDeviation(dataset:Map[Int, UserPref], item1:Int, item2:Int, cardinality:Int=0, value:Double=0, index:Int=0):(Double, Int) = {
     if(dataset.size-1 < index) return (value, cardinality)
 
     val datasetArray = dataset.toArray
@@ -40,10 +40,10 @@ class Algorithms {
 
   //Req._2 = (User, Item)
   //result = (numinator, denominator)
-  def predictRating(userPreference:Map[String, UserPref], deviationMatrix:Map[Int, ItemReference], request:(Int, Int),
+  def predictRating(userPreference:Map[Int, UserPref], deviationMatrix:Map[Int, ItemReference], request:(Int, Int),
                             index:Int=0, result:(Double, Double)=(0,0)): Double = {
     val currentUserItemRef:List[(Int, Double, Int)] = deviationMatrix.get(request._2).get.results //DEVIATION MATRIX
-    val currentUserUserPref:Array[(Int, Double)] = userPreference.get(request._1.toString).get.ratings.toArray  //RATINGS
+    val currentUserUserPref:Array[(Int, Double)] = userPreference.get(request._1).get.ratings.toArray  //RATINGS
     if(index>currentUserUserPref.length-1) return result._1/result._2
 
     val j = currentUserUserPref(index) // Get deviation from i to this

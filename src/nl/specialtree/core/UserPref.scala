@@ -24,7 +24,7 @@ class UserPref(id:String) {
 
   private def getRatingRecursive(item:Int, index:Int=0):Double = {
     val ratingsArr = ratings.toArray
-    if(index>ratingsArr.size-1) return -1
+    if(index>ratingsArr.length-1) return -1
     if(ratingsArr(index)._1 == item)
       return ratingsArr(index)._2
     getRatingRecursive(item, index+1)
