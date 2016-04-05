@@ -205,13 +205,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
                                 index:Int = 0,recommendation:Map[Int,Double] = Map[Int,Double]()) : Map[Int,Double] = {
     val userDataSetArr = userDataSet.get(userID).get.ratings.toArray
     if(index > userDataSetArr.length -1 ) return recommendation
-    //val userDataSetArr = userDataSet.get(userID).get.ratings.toArray
-    val userIDInt = userID.toInt
-    val item = userDataSetArr(index)
-    val a = traverseDeviationMatrix(userIDInt,item._1,userDataSet,deviationMatrix)
-    println(a)
-    val recommendationMap = recommendation ++ a
-    println(recommendationMap)
+    val recommendationMap = recommendation ++ traverseDeviationMatrix(userID.toInt,userDataSetArr(index)._1,userDataSet,deviationMatrix)
     traverseUserItems(userID,userDataSet,deviationMatrix,index+1,recommendation=recommendationMap)
 
   }
@@ -224,8 +218,9 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     val devMatrixArr = deviationMatrix.toArray
     val otherItem = devMatrixArr(index)
     val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItem._1).get.results.toArray
+    val userItems:Array[(Int, Double)] = userDataSet.get(userID.toString).get.ratings.toArray
 
-    if(devMatrixResults.exists{a => a._1 == itemID}) {
+    if(devMatrixResults.exists{a => a._1 == itemID} && !userItems.exists{a => a._1 == otherItem._1}) {
       val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userID,otherItem._1))
       val newMap = Map(otherItem._1 -> predictedRating) ++ recommendation
       traverseDeviationMatrix(userID,itemID, userDataSet, deviationMatrix, index+1, newMap)
