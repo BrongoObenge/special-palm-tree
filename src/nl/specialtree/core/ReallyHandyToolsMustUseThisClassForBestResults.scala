@@ -30,7 +30,9 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
           }
         }
       }
+      println("done")
     }
+
     if(Config.debug) this.printDeviationMatrix(returnVal)
   returnVal
   }
@@ -154,6 +156,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
       if(itemInResults._1 != userItemRating._2) {
         val item2 = (itemInResults._1,itemInResults._2)
         newDevMatrix = updateDeviation(newDevMatrix,item1,item2)
+        newDevMatrix = updateDeviation(newDevMatrix,item2,item1)
       }
     }
     newDevMatrix
@@ -273,4 +276,17 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     }
   }
   //END =====ATTEMPT1
+
+  //a function found on stackoverflow to measure the execution time in nanoseconds
+  //to which it will be converted in ms.
+  def time[R](block: => R): R = {
+    val t0 = System.nanoTime()
+    val result = block    // call-by-name
+    val t1 = System.nanoTime()
+    //1000000ns is 1ms
+    val timeInNs = t1 - t0
+    println("Elapsed time: " + timeInNs + "ns")
+    println("Elapsed time: " + timeInNs / 1000000 + "ms")
+    result
+  }
 }

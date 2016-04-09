@@ -17,6 +17,7 @@ class LoadDataService() {
       for (line <- source.getLines()) {
         val ln = line.split(',')
         //val ln = line.split("\t")
+        //val ln1 = line.sp
         if (Config.debug) println(s"user ${ln(0)} item ${ln(1)} itemRating ${ln(2)}")
         if (userMap.contains(ln(0).toInt)) {
           val tempUserPreference = userMap.get(ln(0).toInt).get
