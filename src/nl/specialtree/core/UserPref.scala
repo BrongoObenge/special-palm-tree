@@ -5,9 +5,9 @@ package nl.specialtree.core
   * Created by jiar on 29-3-16.
   */
 
-class UserPref(id:String) {
-  val userId = id
-  var ratings:List[(Int, Double)] = List()
+class UserPref(val userId:String, var ratings:List[(Int,Double)] = List()) {
+  //val userId = userId
+  //var ratings:List[(Int, Double)] = ratings
 
   def getRating(item:Int, recursion:Boolean=true):Double = {
     if (recursion) return getRatingRecursive(item)

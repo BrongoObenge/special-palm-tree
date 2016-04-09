@@ -112,7 +112,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
   }
 
   def updateDevationMatrix(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),    //TODO put in recursion
-        item2:(Int, Double), recursive:Boolean=false):Map[Int, ItemReference] = {
+                           item2:(Int, Double), recursive:Boolean=false):Map[Int, ItemReference] = {
     //assert(item1._1 != item2._1)
     if(recursive) return a2(deviationMatrix, item1, item2)
     val itemReference:ItemReference = deviationMatrix.get(item1._1).get
@@ -129,6 +129,48 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
 
     if(Config.debug) this.printDeviationMatrix(deviationMatrix)
     deviationMatrix
+  }
+
+  private def updateDeviation(deviationMatrix:Map[Int, ItemReference], item1:(Int, Double),
+                           item2:(Int, Double)):Map[Int, ItemReference] = {
+    val itemRef:ItemReference = deviationMatrix.get(item1._1).get
+    for(itemInResults <- itemRef.results) {
+      if(itemInResults._1 == item2._1) {
+        val newDeviation:Double = ((itemInResults._2*itemInResults._3)+(item1._2 - item2._2))/(itemInResults._3+1) //(CurrentDeviation * Cardinality)+(item1Rating - item2Rating)/Cardinality+1
+        val newItemInResults = (itemInResults._1,newDeviation,itemInResults._3+1)
+        val newResults = itemRef.results.filterNot(x => {x == itemInResults}).::(newItemInResults)
+        val newItemRef:ItemReference = new ItemReference(item1._1,newResults)
+        return deviationMatrix.updated(item1._1,newItemRef)
+      }
+    }
+    deviationMatrix
+  }
+
+  def updateDeviationMatrix(userMap:Map[Int,UserPref], deviationMatrix:Map[Int, ItemReference], userItemRating:(Int,Int, Double)):Map[Int, ItemReference] = {
+    val userPreference:UserPref = userMap.get(userItemRating._1).get
+    val item1 = (userItemRating._2,userItemRating._3)
+    var newDevMatrix:Map[Int,ItemReference] = deviationMatrix
+    for(itemInResults <- userPreference.ratings.iterator) {
+      if(itemInResults._1 != userItemRating._2) {
+        val item2 = (itemInResults._1,itemInResults._2)
+        newDevMatrix = updateDeviation(newDevMatrix,item1,item2)
+      }
+    }
+    newDevMatrix
+  }
+
+  def addNewItemToUser(user:Int, item:Int, rating:Double, dataset:Map[Int, UserPref]):Map[Int, UserPref] = {
+    //Add new Item and rating to the givenUser
+    if(dataset.contains(user)) {
+      val userPreference:UserPref = dataset.get(user).get
+      if(!userPreference.ratings.contains((item,rating))) {
+        val newUserPreference:UserPref = new UserPref(userPreference.userId,userPreference.ratings.::(item,rating))
+        val newDataSet = dataset + (user -> newUserPreference)
+        return newDataSet
+      }
+    }
+    //return the normal dataset if the user does not exist in the dataset
+    dataset
   }
 
   //=====ATTEMPT2
