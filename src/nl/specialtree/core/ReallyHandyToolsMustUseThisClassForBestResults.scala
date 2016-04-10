@@ -283,7 +283,7 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     if(recursion)return recommendationsRecursive(user,userDataSet,deviationMatrix, limit)
     var recommendations:Map[Int,Double] = Map[Int,Double]()
     val alg:Algorithms = new Algorithms()
-    val userIdInt:Int = user.toInt
+    val userIdInt:Int = user
     val userItems:Array[(Int, Double)] = userDataSet.get(user).get.ratings.toArray
     for(item <- userItems) {
         println(item._1)
