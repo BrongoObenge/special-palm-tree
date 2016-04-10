@@ -36,6 +36,69 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     if(Config.debug) this.printDeviationMatrix(returnVal)
   returnVal
   }
+
+  def newCalculateAllDeviations(dataset:Map[Int,UserPref]):Map[Int,ItemReference] = {
+    var deviationMatrix:Map[Int,ItemReference] = Map()
+    //adds all the dataset needed for the computation
+    var count = 0;
+    for(user <- dataset) {
+      for(item <- user._2.ratings) {
+/*        if(!deviationMatrix.exists(x => x._1 == item._1)) {
+          deviationMatrix += (item._1 -> new ItemReference(item._1))
+        }*/
+        if(!deviationMatrix.contains(item._1)){
+          deviationMatrix += (item._1 -> new ItemReference(item._1))
+        }
+/*        deviationMatrix += (item._1 -> new ItemReference(item._1))*/
+        for(item2 <- user._2.ratings) {
+          if(item._1 != item2._1) {
+            val itemResults = deviationMatrix.get(item._1).get.results
+            if(itemResults.exists{x => x._1 == item2._1}) {
+              //println("update1")
+              val itemInRatings = itemResults.find(x => x._1 == item2._1).get
+              var dev = itemInRatings._2
+              var freq = itemInRatings._3
+              dev += item._2 - item2._2
+              freq += 1
+              val newItemInRatings = (itemInRatings._1,dev,freq)
+              val newResults = itemResults.filterNot(x => x._1 == item2._1).::(newItemInRatings)
+              val updatedItemRef:ItemReference = new ItemReference(item._1,newResults)
+              deviationMatrix = deviationMatrix.updated(item._1,updatedItemRef)
+            } else {
+              //println("update2")
+              val dev = item._2 - item2._2
+              val freq = 1
+              val newResults = itemResults.::((item2._1,dev,freq))
+              val updatedItemRef:ItemReference = new ItemReference(item._1,newResults)
+              deviationMatrix = deviationMatrix.updated(item._1, updatedItemRef)
+            }
+          }
+        }
+      }
+    println(s"done, count: $count")
+      count+=1
+    }
+    println("Beginning with deviation computation")
+    //compute the deviation in matrix
+    var newDevMatrix = deviationMatrix
+    for(itemInResults <- deviationMatrix) {
+      //val itemResults = deviationMatrix.get(itemInResults._1).get.results
+      for(item2InResults <- deviationMatrix.get(itemInResults._1).get.results) {
+        val itemResults = deviationMatrix.get(itemInResults._1).get.results
+        val sumOfdeviation = item2InResults._2
+        val /**/freq = item2InResults._3
+        val deviation = sumOfdeviation / freq
+        //println(s"item1 ${itemInResults._1} item2 ${item2InResults._1}")
+        //println(s"sumOfDeviation $sumOfdeviation freq $freq deviation $deviation")
+        val newItemInRatings = (item2InResults._1,deviation,freq)
+        val newResults = itemResults.filterNot(x => x._1 == item2InResults._1).::(newItemInRatings)
+        val updatedItemRef:ItemReference = new ItemReference(itemInResults._1,newResults)
+        deviationMatrix = deviationMatrix.updated(itemInResults._1,updatedItemRef)
+        //println("just for fun")
+      }
+    }
+    deviationMatrix
+  }
 //
 //  def topRecommendations() ={
 //    val alg = new Algorithms()

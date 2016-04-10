@@ -5,6 +5,6 @@ package nl.specialtree.config
   */
 object Config {
   val prefix = "/home/razmaklat/ToolKit/JavaScalaProjects"
-  val dataLocation = prefix+"/special-palm-tree/res/data/userItem.data"
+  val dataLocation = prefix+"/special-palm-tree/res/data/u.data"
   val debug = false
 }
