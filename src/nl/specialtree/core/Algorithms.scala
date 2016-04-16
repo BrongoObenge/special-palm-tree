@@ -39,7 +39,9 @@ class Algorithms {
   }
 
   //Req._2 = (User, Item)
-  //result = (numinator, denominator)
+  //result = (numerator, denominator)
+
+  //===================OLD METHOD==========================
   def predictRating(userPreference:Map[Int, UserPref], deviationMatrix:Map[Int, ItemReference], request:(Int, Int),
                             index:Int=0, result:(Double, Double)=(0,0)): Double = {
     val currentUserItemRef:List[(Int, Double, Int)] = deviationMatrix.get(request._2).get.results //DEVIATION MATRIX
@@ -64,5 +66,25 @@ class Algorithms {
     if(index>arr.length-1) return -1
     if(arr(index)._1 == matchValue) return arr(index)._2
     anotherBullshitMatcher(arr, matchValue, index+1)
+  }
+  //===================OLD METHOD==========================
+
+  def newPredictRating(userPreference:UserPref, deviationMatrix:Map[Int, ItemReference],
+                       itemToPredict:Int) : Double = {
+    val userRatedItemList:List[(Int,Double)] = userPreference.ratings
+    var numerator:Double = 0.0
+    var denominator:Double = 0.0
+
+    for(item <- userRatedItemList) {
+      val deviation = deviationMatrix.get(itemToPredict).get.results.find{x => x._1 == item._1}.getOrElse((0,0.0,0))
+      if(deviation._1 != 0 && deviation._2 != 0) {
+        numerator += (item._2 + deviation._2) * deviation._3
+        denominator += deviation._3
+      } else {
+        //println("Intrusion!! (0)")
+      }
+    }
+
+    return numerator / denominator
   }
 }

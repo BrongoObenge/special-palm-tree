@@ -9,6 +9,13 @@ object Main extends App{
   //val deviationMatrix:Map[Int,ItemReference] = h.calculateAllDeviations(userMap)
   val otherDeviationMatrix:Map[Int,ItemReference] = h.newCalculateAllDeviations(userMap)
 
+/*
+  //#########TESTING THE PREDICTION METHODS#################################
+  println("item: 103 " + new Algorithms().predictRating(userMap, otherDeviationMatrix, (7, 103)))
+  println("item: 103 " + new Algorithms().newPredictRating(userMap.get(7).get, otherDeviationMatrix, 103))
+  //######END TESTING THE PREDICTION METHODS################################
+*/
+
   /*println(otherDeviationMatrix.size)
   println("===================Old method ===============================")
   h.printDeviationMatrix(deviationMatrix)
@@ -33,9 +40,8 @@ object Main extends App{
   println("item: 106 " + new Algorithms().predictRating(userMap, updatedDeviationMatrix, (7, 106)))
   println("==============================END prediction user7==================================================")*/
 
-  println("==========================Top Recommendation user 186 =========================================")
-  var recommendations = h.time{h.recommendations(186,userMap,otherDeviationMatrix,10)}
-  recommendations.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
-  println("==========================End Top Recommendation===============================================")
-
+  println("==========================Top Recommendation user 186 NEW METHOD=========================================")
+  var recommendations2 = h.time{h.newRecommendations(186,userMap,otherDeviationMatrix,10)}
+  recommendations2.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
+  println("==========================End Top Recommendation RECURSIVE===============================================")
 }
