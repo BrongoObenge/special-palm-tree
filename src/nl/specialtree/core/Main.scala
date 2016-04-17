@@ -41,7 +41,7 @@ object Main extends App{
   println("==============================END prediction user7==================================================")*/
 
   println("==========================Top Recommendation user 186 NEW METHOD=========================================")
-  var recommendations2 = h.time{h.newRecommendations(186,userMap,otherDeviationMatrix,10)}
+  var recommendations2 = h.time{h.recommendations(186,userMap,otherDeviationMatrix,10)}
   recommendations2.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
   println("==========================End Top Recommendation RECURSIVE===============================================")
 }

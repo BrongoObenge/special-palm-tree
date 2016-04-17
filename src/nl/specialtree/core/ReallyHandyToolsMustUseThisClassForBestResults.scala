@@ -5,7 +5,7 @@ import nl.specialtree.config.Config
 import scala.collection.immutable.ListMap
 
 /**
-  * Created by jiar on 29-3-16.
+  * Created by jiar and Razmaklat :P on 29-3-16.
   */
 
 class ReallyHandyToolsMustUseThisClassForBestResults {
@@ -118,68 +118,26 @@ class ReallyHandyToolsMustUseThisClassForBestResults {
     dataset
   }
 
-  def newRecommendations(user:Int, userDataSet:Map[Int,UserPref], deviationMatrix:Map[Int,ItemReference], limit:Int=0,
-                      recursion:Boolean=false)
+  def recommendations(user:Int, userDataSet:Map[Int,UserPref], deviationMatrix:Map[Int,ItemReference], limit:Int=0)
   : Map[Int,Double] = {
     //using the slope one algorithm
-    if(recursion)return recommendationsRecursive(user,userDataSet,deviationMatrix, limit)
     var recommendations:Map[Int,Double] = Map[Int,Double]()
     val alg:Algorithms = new Algorithms()
     val userItems:Array[(Int, Double)] = userDataSet.get(user).get.ratings.toArray
-    var recommendCounter = 0
     for(otherItem <- deviationMatrix) {
       if(!userItems.exists{a => a._1 == otherItem._1} ) {
         val itemID = otherItem._1
         val predictedRating = alg.newPredictRating(userDataSet.get(user).get,deviationMatrix,itemID)
         recommendations += (itemID -> predictedRating)
       }
-/*      println(s"$recommendCounter recommendation done")
-      recommendCounter += 1*/
     }
     val sortedRecommendations = ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*).take(limit)
     sortedRecommendations
   }
 
-  //=====ATTEMPT1 recommendations Recursive
-  def recommendationsRecursive(userID:Int,userDataSet:Map[Int,UserPref],deviationMatrix:Map[Int,ItemReference],
-                               limit:Int=0):Map[Int,Double] = {
-    val recommendations = traverseUserItems(userID,userDataSet,deviationMatrix)
-    if(limit == 0 )ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*)
-    else ListMap(recommendations.toSeq.sortWith(_._2 > _._2):_*).take(limit)
-  }
-
-  private def traverseUserItems(userID:Int,userDataSet:Map[Int,UserPref],deviationMatrix:Map[Int,ItemReference],
-                                index:Int = 0,recommendation:Map[Int,Double] = Map[Int,Double]()) : Map[Int,Double] = {
-    val userDataSetArr = userDataSet.get(userID).get.ratings.toArray
-    if(index > userDataSetArr.length -1 ) return recommendation
-    val recommendationMap = recommendation ++ traverseDeviationMatrix(userID.toInt,userDataSetArr(index)._1,userDataSet,deviationMatrix)
-    traverseUserItems(userID,userDataSet,deviationMatrix,index+1,recommendation=recommendationMap)
-
-  }
-
-  private def traverseDeviationMatrix(userID:Int,itemID:Int,userDataSet:Map[Int,UserPref],
-                                      deviationMatrix:Map[Int,ItemReference], index:Int = 0,
-                                      recommendation:Map[Int,Double]=Map[Int,Double]()) : Map[Int,Double] = {
-    if(index > deviationMatrix.size -1 ) return recommendation
-    val alg = new Algorithms()
-    val devMatrixArr = deviationMatrix.toArray
-    val otherItem = devMatrixArr(index)
-    val devMatrixResults:Array[(Int,Double,Int)] = deviationMatrix.get(otherItem._1).get.results.toArray
-    val userItems:Array[(Int, Double)] = userDataSet.get(userID).get.ratings.toArray
-
-    if(devMatrixResults.exists{a => a._1 == itemID} && !userItems.exists{a => a._1 == otherItem._1}) {
-      val predictedRating = alg.predictRating(userDataSet,deviationMatrix,(userID,otherItem._1))
-      val newMap = Map(otherItem._1 -> predictedRating) ++ recommendation
-      traverseDeviationMatrix(userID,itemID, userDataSet, deviationMatrix, index+1, newMap)
-    }else {
-      traverseDeviationMatrix(userID, itemID, userDataSet, deviationMatrix, index + 1, recommendation)
-    }
-  }
-  //END =====ATTEMPT1
-
-  //a function found on stackoverflow to measure the execution time in nanoseconds
-  //to which it will be converted in ms.
   def time[R](block: => R): R = {
+    //a function found on stackoverflow to measure the execution time in nanoseconds
+    //to which it will be converted in ms.
     val t0 = System.nanoTime()
     val result = block    // call-by-name
     val t1 = System.nanoTime()
