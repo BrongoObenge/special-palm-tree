@@ -8,6 +8,8 @@ import scala.collection.immutable.ListMap
   */
 class HandyToolFunctional {
 
+  //This class holds all functional stuff for INFSEN01
+
   def calcDeviations(userMap:Map[Int,UserPref]):Map[Int,ItemReference] = {
     //set all data in place
     val deviationMatrix = setAllData(userMap)

@@ -3,6 +3,27 @@ package nl.specialtree.core
   * Created by razmaklat on 22-3-16.
   */
 object Main extends App{
+
+  val handyF:classRoomAssignment =  new classRoomAssignment()
+  //Assignment 1
+  val answer1 = handyF.fizzBuzz(4,4)
+  println(answer1)
+
+  //Assignment 2 part1
+  val arrayA:Array[Any] = Array(1,2,false)
+  val arrayB:Array[Any] = Array(true,false,false)
+  println(arrayA(2))
+  val answer2_1 = handyF.mrZipper(arrayA,arrayB)
+  answer2_1.foreach(x => println(s"key: ${x._1} value: ${x._2}"))
+
+  //Assignment 2 part2
+  val answer2_2 = handyF.mrUnZipper(answer2_1)
+  println(answer2_2)
+
+
+  //Assignment4
+
+  /*
   //for the print stuff
   val notFunctional = "Not Functional"
   val functional = "Functional"
@@ -49,6 +70,7 @@ object Main extends App{
   b.foreach(result => println(s"item: ${result._1} rating: ${result._2}"))
   println("=============================END User 7 Functional Update method========================================")
   println("========================END Recommendation section ====================================================")
+*/
 
 /*  println("===========================Recommendation section ====================================================")
   println("=============================user 186 Non Functional Update method =======================================")
